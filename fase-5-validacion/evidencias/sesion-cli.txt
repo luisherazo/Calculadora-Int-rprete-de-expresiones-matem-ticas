@@ -1,0 +1,241 @@
+calc> 2 + 3 * 4 ^ 2
+  Tokens:      2  +  3  *  4  ^  2
+  Agrupación:  (2 + (3 * (4 ^ 2)))
+  Árbol:
+    +
+    ├── 2
+    └── *
+        ├── 3
+        └── ^
+            ├── 4
+            └── 2
+  RPN:         2 3 4 2 ^ * +
+  Tripletes:   (0) ^ 4 2 | (1) * 3 (0) | (2) + 2 (1)
+  Cuádruplos:  (^, 4, 2, t1) | (*, 3, t1, t2) | (+, 2, t2, t3)
+  Pila:        [2] → [2, 3] → [2, 3, 4] → [2, 3, 4, 2] → [2, 3, 16] → [2, 48] → [50]
+  Explicación:
+    - Se calcula 4 ^ 2 = 16, porque ^ tiene mayor precedencia que *.
+    - Se calcula 3 * 16 = 48, porque * tiene mayor precedencia que +.
+    - Por último, se calcula 2 + 48 = 50.
+  = 50
+
+calc> 10 - 4 - 3
+  Tokens:      10  -  4  -  3
+  Agrupación:  ((10 - 4) - 3)
+  Árbol:
+    -
+    ├── -
+    │   ├── 10
+    │   └── 4
+    └── 3
+  RPN:         10 4 - 3 -
+  Tripletes:   (0) - 10 4 | (1) - (0) 3
+  Cuádruplos:  (-, 10, 4, t1) | (-, t1, 3, t2)
+  Pila:        [10] → [10, 4] → [6] → [6, 3] → [3]
+  Explicación:
+    - Se calcula 10 - 4 = 6, por asociatividad izquierda: entre operadores del mismo nivel se resuelve primero la operación de la izquierda.
+    - Por último, se calcula 6 - 3 = 3.
+  = 3
+
+calc> 2 ^ 3 ^ 2
+  Tokens:      2  ^  3  ^  2
+  Agrupación:  (2 ^ (3 ^ 2))
+  Árbol:
+    ^
+    ├── 2
+    └── ^
+        ├── 3
+        └── 2
+  RPN:         2 3 2 ^ ^
+  Tripletes:   (0) ^ 3 2 | (1) ^ 2 (0)
+  Cuádruplos:  (^, 3, 2, t1) | (^, 2, t1, t2)
+  Pila:        [2] → [2, 3] → [2, 3, 2] → [2, 9] → [512]
+  Explicación:
+    - Se calcula 3 ^ 2 = 9, por asociatividad derecha: las potencias se resuelven de derecha a izquierda.
+    - Por último, se calcula 2 ^ 9 = 512.
+  = 512
+
+calc> -2 ^ 2
+  Tokens:      -  2  ^  2
+  Agrupación:  (-(2 ^ 2))
+  Árbol:
+    neg
+    └── ^
+        ├── 2
+        └── 2
+  RPN:         2 2 ^ neg
+  Tripletes:   (0) ^ 2 2 | (1) neg (0) —
+  Cuádruplos:  (^, 2, 2, t1) | (neg, t1, —, t2)
+  Pila:        [2] → [2, 2] → [4] → [-4]
+  Explicación:
+    - Se calcula 2 ^ 2 = 4, porque ^ tiene mayor precedencia que el menos unario.
+    - Por último, se calcula -(4) = -4.
+  = -4
+
+calc> x = 3
+  Tokens:      x  =  3
+  Agrupación:  (x = 3)
+  Árbol:
+    x =
+    └── 3
+  RPN:         &x 3 =
+  Tripletes:   (0) = x 3
+  Cuádruplos:  (=, 3, —, x)
+  Pila:        [&x] → [&x, 3] → [3]
+  Explicación:
+    - Se asigna x = 3.
+  = 3
+
+calc> 2x^2 + 1
+  Tokens:      2  x  ^  2  +  1
+  Agrupación:  ((2 · (x ^ 2)) + 1)
+  Árbol:
+    +
+    ├── * (implícita)
+    │   ├── 2
+    │   └── ^
+    │       ├── x
+    │       └── 2
+    └── 1
+  RPN:         2 x 2 ^ * 1 +
+  Tripletes:   (0) ^ x 2 | (1) * 2 (0) | (2) + (1) 1
+  Cuádruplos:  (^, x, 2, t1) | (*, 2, t1, t2) | (+, t2, 1, t3)
+  Pila:        [2] → [2, 3] → [2, 3, 2] → [2, 9] → [18] → [18, 1] → [19]
+  Explicación:
+    - Se calcula 3 ^ 2 = 9, porque ^ tiene mayor precedencia que *.
+    - Se calcula 2 * 9 = 18 (multiplicación implícita), porque * tiene mayor precedencia que +.
+    - Por último, se calcula 18 + 1 = 19.
+  = 19
+
+calc> (x + 1)(x - 1)
+  Tokens:      (  x  +  1  )  (  x  -  1  )
+  Agrupación:  ((x + 1) · (x - 1))
+  Árbol:
+    * (implícita)
+    ├── +
+    │   ├── x
+    │   └── 1
+    └── -
+        ├── x
+        └── 1
+  RPN:         x 1 + x 1 - *
+  Tripletes:   (0) + x 1 | (1) - x 1 | (2) * (0) (1)
+  Cuádruplos:  (+, x, 1, t1) | (-, x, 1, t2) | (*, t1, t2, t3)
+  Pila:        [3] → [3, 1] → [4] → [4, 3] → [4, 3, 1] → [4, 2] → [8]
+  Explicación:
+    - Se calcula 3 + 1 = 4, porque está entre paréntesis.
+    - Se calcula 3 - 1 = 2, porque está entre paréntesis.
+    - Por último, se calcula 4 * 2 = 8 (multiplicación implícita).
+  = 8
+
+calc> y = max(2, sqrt(9)) / 2
+  Tokens:      y  =  max  (  2  ,  sqrt  (  9  )  )  /  2
+  Agrupación:  (y = (max(2, sqrt(9)) / 2))
+  Árbol:
+    y =
+    └── /
+        ├── max()
+        │   ├── 2
+        │   └── sqrt()
+        │       └── 9
+        └── 2
+  RPN:         &y 2 9 sqrt[1] max[2] 2 / =
+  Tripletes:   (0) param 9 — | (1) call sqrt 1 | (2) param 2 — | (3) param (1) — | (4) call max 2 | (5) / (4) 2 | (6) = y (5)
+  Cuádruplos:  (param, 9, —, —) | (call, sqrt, 1, t1) | (param, 2, —, —) | (param, t1, —, —) | (call, max, 2, t2) | (/, t2, 2, t3) | (=, t3, —, y)
+  Pila:        [&y] → [&y, 2] → [&y, 2, 9] → [&y, 2, 3] → [&y, 3] → [&y, 3, 2] → [&y, 1.5] → [1.5]
+  Explicación:
+    - Se calcula sqrt(9) = 3, porque es un argumento de max.
+    - Se calcula max(2, 3) = 3, porque es un operando de /.
+    - Se calcula 3 / 2 = 1.5, que es el valor que se asigna a y.
+    - Se asigna y = 1.5.
+  = 1.5
+
+calc> 2.5e-3 * 1e3
+  Tokens:      2.5e-3  *  1e3
+  Agrupación:  (2.5e-3 * 1e3)
+  Árbol:
+    *
+    ├── 2.5e-3
+    └── 1e3
+  RPN:         2.5e-3 1e3 *
+  Tripletes:   (0) * 2.5e-3 1e3
+  Cuádruplos:  (*, 2.5e-3, 1e3, t1)
+  Pila:        [0.0025] → [0.0025, 1000] → [2.5]
+  Explicación:
+    - Se calcula 0.0025 * 1000 = 2.5.
+  = 2.5
+
+calc> 3 + $
+
+  3 + $
+      ^
+  L01 · Error léxico: Carácter no válido '$' (columna 5).
+
+calc> (2 + 3
+  Tokens:      (  2  +  3
+
+  (2 + 3
+        ^
+  S02 · Error sintáctico: Falta ')' para cerrar el '(' de la columna 1 (columna 7).
+
+calc> 2 3
+  Tokens:      2  3
+
+  2 3
+    ^
+  S03 · Error sintáctico: Se esperaba un operador o el fin de la expresión y se encontró '3' (columna 3).
+
+calc> foo(3)
+  Tokens:      foo  (  3  )
+  Agrupación:  (foo · 3)
+  Árbol:
+    * (implícita)
+    ├── foo
+    └── 3
+
+  foo(3)
+  ^
+  E01 · Error semántico: La variable 'foo' no está definida (columna 1).
+  ¿Quisiste llamar a una función? Disponibles: sqrt, abs, sin, cos, tan, ln, log, round, min, max.
+
+calc> sqrt(1, 2)
+  Tokens:      sqrt  (  1  ,  2  )
+  Agrupación:  sqrt(1, 2)
+  Árbol:
+    sqrt()
+    ├── 1
+    └── 2
+
+  sqrt(1, 2)
+  ^
+  E03 · Error semántico: 'sqrt' espera 1 argumento y recibió 2 (columna 1).
+
+calc> pi = 3
+  Tokens:      pi  =  3
+  Agrupación:  (pi = 3)
+  Árbol:
+    pi =
+    └── 3
+
+  pi = 3
+  ^
+  E04 · Error semántico: 'pi' es una constante y no se puede modificar (columna 1).
+
+calc> 2 + 5 / 0
+  Tokens:      2  +  5  /  0
+  Agrupación:  (2 + (5 / 0))
+  Árbol:
+    +
+    ├── 2
+    └── /
+        ├── 5
+        └── 0
+  RPN:         2 5 0 / +
+  Tripletes:   (0) / 5 0 | (1) + 2 (0)
+  Cuádruplos:  (/, 5, 0, t1) | (+, 2, t1, t2)
+  Pila:        [2] → [2, 5] → [2, 5, 0]
+
+  2 + 5 / 0
+        ^
+  E02 · Error semántico: División por cero (columna 7).
+

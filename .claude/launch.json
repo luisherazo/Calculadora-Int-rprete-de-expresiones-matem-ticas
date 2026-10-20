@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "calculadora",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["fase-4-implementacion/servidor.js", "8080"],
+      "port": 8080
+    }
+  ]
+}

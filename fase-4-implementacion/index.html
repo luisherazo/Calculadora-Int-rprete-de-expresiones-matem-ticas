@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Calculadora explicativa</title>
+  <meta name="description" content="Intérprete de expresiones matemáticas que muestra tokens, árbol sintáctico, código intermedio y la pila de evaluación.">
+  <meta name="color-scheme" content="light dark">
+  <script>
+    // Aplica el tema guardado antes de pintar, para evitar un parpadeo.
+    try {
+      const tema = localStorage.getItem('calculadora-tema');
+      if (tema === 'light' || tema === 'dark') document.documentElement.dataset.theme = tema;
+    } catch { /* sin almacenamiento: se usa el tema del sistema */ }
+  </script>
+  <link rel="stylesheet" href="estilos.css">
+  <script type="module" src="src/ui.js"></script>
+</head>
+<body>
+  <header class="cabecera contenedor">
+    <div class="marca">
+      <div class="logo" aria-hidden="true"><span>f</span><span>(x)</span></div>
+      <div>
+        <h1>Calculadora explicativa</h1>
+        <p class="subtitulo">Mira cómo un compilador entiende tu expresión, paso a paso</p>
+      </div>
+    </div>
+    <button id="cambiar-tema" class="boton-icono" type="button" aria-label="Cambiar entre tema claro y oscuro"></button>
+  </header>
+
+  <main class="contenedor">
+    <section class="tarjeta tarjeta-entrada" aria-label="Entrada">
+      <form id="formulario" class="pantalla" autocomplete="off">
+        <span class="prompt" aria-hidden="true">›</span>
+        <label for="entrada" class="solo-lector">Expresión</label>
+        <input id="entrada" name="entrada" type="text" spellcheck="false" autocapitalize="off"
+               placeholder="2 + 3 * 4 ^ 2" autofocus>
+        <button type="submit" class="boton-primario">Evaluar <kbd>Enter</kbd></button>
+      </form>
+      <div class="ejemplos">
+        <span class="etiqueta-ejemplos">Prueba con</span>
+        <div id="ejemplos" class="lista-ejemplos"></div>
+      </div>
+      <div id="error" class="error" role="alert" hidden></div>
+    </section>
+
+    <section class="resumen">
+      <div class="tarjeta tarjeta-resultado">
+        <h2 class="titulo-tarjeta">Resultado</h2>
+        <div id="eco" class="eco"></div>
+        <output id="resultado" class="resultado" for="entrada">—</output>
+        <div id="detalle-resultado" class="detalle-resultado"></div>
+      </div>
+      <div class="tarjeta">
+        <div class="titulo-con-accion">
+          <h2 class="titulo-tarjeta">Variables</h2>
+          <button id="borrar-variables" class="boton-texto" type="button">Borrar</button>
+        </div>
+        <ul id="variables" class="lista-variables"></ul>
+      </div>
+    </section>
+
+    <section class="tarjeta tarjeta-etapas">
+      <div class="etapas" role="tablist" aria-label="Etapas del intérprete">
+        <button type="button" role="tab" data-pestana="tokens">
+          <span class="etapa-icono">1</span>
+          <span class="etapa-texto"><strong>Tokens</strong><small>Análisis léxico</small></span>
+        </button>
+        <button type="button" role="tab" data-pestana="arbol">
+          <span class="etapa-icono">2</span>
+          <span class="etapa-texto"><strong>Árbol</strong><small>Análisis sintáctico</small></span>
+        </button>
+        <button type="button" role="tab" data-pestana="intermedio">
+          <span class="etapa-icono">3</span>
+          <span class="etapa-texto"><strong>Intermedio</strong><small>RPN y tripletes</small></span>
+        </button>
+        <button type="button" role="tab" data-pestana="evaluacion">
+          <span class="etapa-icono">4</span>
+          <span class="etapa-texto"><strong>Evaluación</strong><small>Pila paso a paso</small></span>
+        </button>
+        <button type="button" role="tab" data-pestana="explicacion">
+          <span class="etapa-icono">5</span>
+          <span class="etapa-texto"><strong>Explicación</strong><small>En palabras</small></span>
+        </button>
+      </div>
+      <div id="vista-tokens" class="vista" role="tabpanel"></div>
+      <div id="vista-arbol" class="vista" role="tabpanel"></div>
+      <div id="vista-intermedio" class="vista" role="tabpanel"></div>
+      <div id="vista-evaluacion" class="vista" role="tabpanel"></div>
+      <div id="vista-explicacion" class="vista" role="tabpanel"></div>
+    </section>
+
+    <section class="tarjeta">
+      <h2 class="titulo-tarjeta">Historial</h2>
+      <ol id="historial" class="historial"></ol>
+    </section>
+  </main>
+
+  <footer class="pie contenedor">
+    Compiladores · Proyecto integrador · Proyecto 04: intérprete de expresiones matemáticas
+  </footer>
+</body>
+</html>
