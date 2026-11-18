@@ -110,20 +110,13 @@ Se probó en el navegador integrado con `npm start`:
 | Tema oscuro y claro | Ambos revisados en pantalla; el botón de tema alterna y recuerda la elección ✔ |
 | Línea de etapas | Con `2 + 5 / 0`: tokens, árbol e intermedio en verde y evaluación en rojo ✔ |
 
-### 5.1 Capturas para el documento final
+### 5.1 Capturas
 
-Las capturas las debe tomar el equipo en su propio navegador (`npm start` → http://localhost:8080) y guardarlas en `fase-5-validacion/evidencias/capturas/`:
+Estas capturas se tomaron de la interfaz en funcionamiento con `npm start`. La primera muestra la evaluación a mitad de la traza; la segunda, un error de sintaxis con su columna marcada.
 
-| Archivo sugerido | Qué mostrar |
-|---|---|
-| `01-tokens.png` | `2.5e-3 * 1e3` en la pestaña Tokens, con el recorrido del AFD abierto |
-| `02-arbol.png` | `2 + 3 * 4 ^ 2` en la pestaña Árbol |
-| `03-intermedio.png` | `y = max(2, sqrt(9)) / 2` en Código intermedio (RPN, tripletes, cuádruplos) |
-| `04-evaluacion.png` | El mismo ejemplo en Evaluación, a mitad de la traza |
-| `05-explicacion.png` | `2x^2 + 1` (con `x = 3`) en Explicación |
-| `06-error-sintactico.png` | `(2 + 3` con la marca de columna |
-| `07-error-ejecucion.png` | `2 + 5 / 0` en Evaluación, con la traza parcial |
-| `08-movil.png` | Cualquier ejemplo con el ancho de un teléfono |
+![Evaluación paso a paso de 2x^2 + 1 con x = 3](../fase-3-diseno/imagenes/pantalla-evaluacion.jpg)
+
+![Error sintáctico S02 en (2 + 3](../fase-3-diseno/imagenes/pantalla-error.jpg)
 
 ## 6. Cumplimiento de la rúbrica
 
@@ -133,7 +126,7 @@ Las capturas las debe tomar el equipo en su propio navegador (`npm start` → ht
 | Funcionamiento técnico del sistema | 25 % | 266 pruebas y 42 de 42 casos correctos; interfaz web y CLI funcionando; errores con código, tipo y columna; evaluación transaccional. |
 | Gramáticas, autómatas y estructuras | 20 % | [Especificación](../fase-2-especificacion/02-especificacion.md): AFD con diagrama y tabla de transiciones, gramática EBNF y BNF, PRIMEROS y SIGUIENTES, demostración LL(1), tabla LL(1) y traza del autómata de pila. [Diseño](../fase-3-diseno/03-diseno.md): AST, tabla de símbolos, elementos RPN y traza. |
 | Documentación y calidad del código | 15 % | Documento técnico por fases; cada módulo comentado y referenciado a su sección de la especificación; una función por regla de la gramática; sin dependencias; 99 % de cobertura de líneas. |
-| Sustentación y dominio conceptual | 10 % | [Guion de sustentación](05-sustentacion.md) con demo, respuesta a la pregunta clave y banco de preguntas. |
+| Sustentación y dominio conceptual | 10 % | Guion de exposición de 10 minutos (documento aparte), respuesta a la pregunta clave y banco de preguntas (sección 8). |
 
 La guía pide además:
 - **"No basta con integrar una librería"**: no hay dependencias ni se usa `eval()`. Toda la lógica central está en `src/`.

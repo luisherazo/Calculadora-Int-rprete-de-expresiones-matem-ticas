@@ -114,5 +114,5 @@ Recuperación de errores para informar varios a la vez, modo de grados, optimiza
 - [ ] Variables borradas antes de empezar la demo.
 - [ ] `fase-2-especificacion/02-especificacion.md` abierto en las secciones 1.3, 2.2 y 2.6.
 - [ ] Terminal lista con la demo de respaldo.
-- [ ] Capturas guardadas en `fase-5-validacion/evidencias/capturas/` (ver validación, sección 5.1).
+- [ ] Guion de exposición repasado por cada integrante (`fase-5-validacion/guion-exposicion.md`).
 - [ ] Cada integrante sabe responder la pregunta clave.

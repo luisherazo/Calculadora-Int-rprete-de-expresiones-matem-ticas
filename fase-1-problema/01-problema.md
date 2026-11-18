@@ -46,7 +46,31 @@ Una **calculadora que explica cómo evalúa expresiones**. Para cada entrada mue
 
 ## 5. Alcance
 
-### 5.1 Incluido
+### 5.1 Problema que se planea solucionar
+
+Cuando una persona escribe una expresión como `2 + 3 * 4 ^ 2`, las calculadoras le dan el resultado (`50`), pero no le muestran cómo lo obtuvieron. Eso genera tres dificultades concretas:
+
+| Dificultad | Ejemplo | Consecuencia |
+|---|---|---|
+| No se ve el **orden de las operaciones** | `2 + 3 * 4` da `14` y no `20` | El estudiante memoriza la regla sin entender por qué funciona. |
+| No se ve la **asociatividad** | `10 - 4 - 3` da `3`; `2 ^ 3 ^ 2` da `512` | Los resultados parecen arbitrarios o "errores" de la calculadora. |
+| Los **errores no se explican** | `3 + * 4` o `(2 + 3` solo dan "Error" | No se sabe qué está mal ni dónde corregir. |
+
+En la asignatura de Compiladores aparece además un problema didáctico: el análisis léxico, el análisis sintáctico, los árboles y el código intermedio se estudian en el tablero, pero rara vez se ven funcionando juntos sobre un ejemplo propio.
+
+**El proyecto soluciona ambos problemas:** construye una calculadora que, para cualquier expresión dentro del alcance, muestra paso a paso cómo la interpreta un compilador. Muestra los tokens, el árbol sintáctico, el código intermedio y la pila de evaluación, explica el porqué de cada operación e indica la columna exacta de cada error.
+
+### 5.2 Público al que va dirigido
+
+| Público | Perfil | Qué obtiene |
+|---|---|---|
+| **Principal: estudiantes de Compiladores** | Pregrado de Ingeniería de Sistemas, cursando las unidades de análisis de lenguajes y código intermedio | Ver en funcionamiento el AFD del lexer, la gramática LL(1), el AST, la notación polaca inversa, los tripletes, los cuádruplos y la pila. |
+| **Secundario: estudiantes de matemáticas básicas** | Bachillerato y primeros semestres universitarios | Entender la precedencia y la asociatividad con sus propios ejemplos y aprender de los errores. |
+| **Docentes** | Profesores de Compiladores o de Matemáticas | Una herramienta para proyectar en clase que muestra cada etapa y los errores típicos. |
+
+La herramienta no está pensada como calculadora científica de uso profesional ni para cálculo simbólico. Su valor está en **explicar**, no en competir en funciones con las calculadoras comerciales.
+
+### 5.3 Incluido
 
 | Elemento | Detalle | Ejemplo |
 |---|---|---|
@@ -64,7 +88,7 @@ Una **calculadora que explica cómo evalúa expresiones**. Para cada entrada mue
 | Errores sintácticos | Estructura incorrecta | `3 + * 4`, `(2 + 3` |
 | Errores semánticos | Variable no definida, división por cero, función desconocida o con aridad incorrecta | `y + 1`, `5 / 0`, `sqrt(1, 2)` |
 
-### 5.2 Fuera de alcance
+### 5.4 Fuera de alcance
 
 - Números complejos y fracciones exactas.
 - Multiplicación implícita con un número a la derecha (`2 3`, `x 2`, `(1)2`): se reporta como error sintáctico porque es ambigua.
